@@ -15,9 +15,10 @@ async function getDataAsArray () {
 }
 
 function getScorePart1 (gameArray) {
-  const shapeSummary = {
+  // Set the base score for each play and the possible outcomes.
+  const scoreKey = {
     'X': {
-      score: 1,
+      score: 1,  // If I play X (Rock) it beats Scissors (C) and ties Rock (A)
       beats: 'C',
       ties: 'A',
     },
@@ -35,13 +36,13 @@ function getScorePart1 (gameArray) {
   
   const opponent = gameArray[0]
   const me = gameArray[1]
-  const baseScore = shapeSummary[`${me}`].score
+  const baseScore = scoreKey[`${me}`].score
   // is win?
-  if (shapeSummary[`${me}`].beats === opponent) {
+  if (scoreKey[`${me}`].beats === opponent) {
     return 6 + baseScore
   }
   // is tie?
-  if (shapeSummary[`${me}`].ties === opponent) {
+  if (scoreKey[`${me}`].ties === opponent) {
     return 3 + baseScore
   }
   // isnt a win or a tie
