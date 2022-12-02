@@ -14,12 +14,12 @@ fs.readFile('calories.txt', 'utf-8', (err, data) => {
 
   // sort the array from high to low
   calories.sort((a,b) => b - a)
-  const max = calories [0]
-  console.log(`The max is ${max}`)
+  const max = calories[0]
+  console.log('The max is:', max)
 
   // Grab the top three and sum them up
   const top3Sum = calories.slice(0,3).reduce((total, current) => {
     return total + current
   })
-  console.log(`The top three elves:`, top3Sum)
+  console.log('The top three elves:', top3Sum)
 })
