@@ -55,7 +55,7 @@ function getScorePart2 (gameArray) {
   const scoreKey = {
     'X': {
       'A': 3,  // If X loses to A (Rock) play Scisors (3 points)
-      'B': 1,  // Rock
+      'B': 1,  
       'C': 2
     },
     'Y': {
