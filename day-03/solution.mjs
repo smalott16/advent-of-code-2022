@@ -15,7 +15,20 @@ const findDuplicatePriority = (ruckSack) => {
   // Loop through first sack and find the duplicate located in the second sack.
   for (let i = 0; i < sack1.length; i++) {
     if (sack2.includes(sack1[i])) {
-      return sack1[i], prioritize(sack1[i])
+      return prioritize(sack1[i])
+    }
+  }
+}
+
+// Accepts an array of three ruck sacks
+// Returns the priority value for the item found in all three sacks
+const findBadge = (ruckSacks) => {
+  const sack1 = ruckSacks[0]
+  const sack2 = ruckSacks[1]
+  const sack3 = ruckSacks[2]
+  for (let i = 0; i < sack1.length; i++) {
+    if (sack2.includes(sack1[i]) && sack3.includes(sack1[i])) {
+      return prioritize(sack1[i])
     }
   }
 }
@@ -24,3 +37,10 @@ const totalPart1 = ruckSackArray.reduce((total, currentValue) => {
   return total + findDuplicatePriority(currentValue)
 }, 0)
 console.log('This sum of priorities of the duplicate items is:', totalPart1)
+
+// Loop through all the dang sacks again.
+let totalPart2 = 0
+for (let i = 0; i < ruckSackArray.length; i += 3) {
+  totalPart2 += findBadge([ruckSackArray[i], ruckSackArray[i + 1], ruckSackArray[i + 2]])
+}
+console.log('This sum of priorities of the badges is:', totalPart2)
