@@ -36,11 +36,11 @@ const findBadge = (ruckSacks) => {
 const totalPart1 = ruckSackArray.reduce((total, currentValue) => {
   return total + findDuplicatePriority(currentValue)
 }, 0)
-console.log('This sum of priorities of the duplicate items is:', totalPart1)
 
-// Loop through all the dang sacks again.
 let totalPart2 = 0
 for (let i = 0; i < ruckSackArray.length; i += 3) {
   totalPart2 += findBadge([ruckSackArray[i], ruckSackArray[i + 1], ruckSackArray[i + 2]])
 }
+
+console.log('This sum of priorities of the duplicate items is:', totalPart1)
 console.log('This sum of priorities of the badges is:', totalPart2)
