@@ -50,9 +50,6 @@ instructions.forEach((instruction) => {
   for (let j = 0; j < movedStack.length; j++) {
     cleanStacksPart2[stackTo -1].push(movedStack[j])
   }
-  console.log('moved', movedStack)
-  console.log('stack2', cleanStacksPart2)
-
 })
 
 // Grab last letter on each stack
