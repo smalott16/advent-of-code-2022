@@ -5,3 +5,4 @@
 - Day 3: Rucksack Reorganization (JS)
 - Day 4: Camp Cleanup (JS)
 - Day 5: Supply Stacks (JS)
+- Day 6: Tuning Trouble (JS)
