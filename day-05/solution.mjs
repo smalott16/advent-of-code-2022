@@ -35,17 +35,22 @@ transposedStacks.forEach((stack) => {
   }
 })
 
-// Move the blocks around
+// Make copy of the stacks to calculate part 1 and 2 simultaneously
 const cleanStacksPart1 = cleanStacks.map((stack) => [...stack])
 const cleanStacksPart2 = cleanStacks.map((stack) => [...stack])
+
+// Move the blocks around
 instructions.forEach((instruction) => {
   const numberMoved = parseInt(instruction[0])
   const stackFrom = parseInt(instruction[1])
   const stackTo = parseInt(instruction[2])
+  
+  // Part 1
   for (let i = 0; i < numberMoved; i++) {
     cleanStacksPart1[stackTo - 1].push(cleanStacksPart1[stackFrom -1].pop())
   }
 
+  // Part 2
   const movedStack = cleanStacksPart2[stackFrom -1].splice(cleanStacksPart2[stackFrom -1].length - numberMoved)
   for (let j = 0; j < movedStack.length; j++) {
     cleanStacksPart2[stackTo -1].push(movedStack[j])
