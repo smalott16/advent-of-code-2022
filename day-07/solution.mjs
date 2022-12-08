@@ -48,7 +48,6 @@ commandLog.forEach((cmd) => {
   // If cmd includes dir then it must be a directory - add it to the current directory's subdirectory list
   if (cmd.includes('dir')) {
     const dirNameAdd = cmd.split(' ').pop()
-    //directories[currentDir].addDirectory(new Directory(dirNameAdd))
     directories[currentDir].addDirectory(`${dirNameAdd}${history.join('')}`)
   }
 
@@ -94,12 +93,11 @@ directoryNames.forEach((subDir) => {
     cumulativeSize += size
   } 
 })
-console.log(cumulativeSize)
+console.log('The cumulative size of all directories less than 100k is:', cumulativeSize)
 
 // Calculate the smallest directory you would need to remove to free up the required space. 
 const remainingMemory = 70000000 - directories['/'].directorySize
 const requiredFreeSpace = 30000000 - remainingMemory
-console.log('Remaining Memory:', remainingMemory, 'Required Free Space:', requiredFreeSpace)
 
 let smallestViableDirectory = 70000000
 directoryNames.forEach((subDir) => {
@@ -110,4 +108,4 @@ directoryNames.forEach((subDir) => {
   }
       
 })
-console.log(smallestViableDirectory)
+console.log('The smallest directory that you could remove to free up enough space is:', smallestViableDirectory)
