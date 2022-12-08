@@ -3,8 +3,7 @@ import fs from 'fs'
 
 const commandLog = (fs.readFileSync('commands.txt', 'utf-8')).split('\n')
 
-// give a unique identifier to all directories
-
+// Each directory will be its own instance
 class Directory {
   constructor (name) {
     this.name = name
@@ -27,29 +26,33 @@ class Directory {
   }
 }
 
-// Build Directory Strucutre
+// Loop through all cmd line i/o entries and create directory objects
 let history = []
 const directories = {}
-commandLog.forEach((cmd, index) => {
-  
+commandLog.forEach((cmd) => {
+  // If entering a directory, create a new instance for that directory
+  // Update the history to keep track of the current directory
   if (cmd.includes('$ cd') && !cmd.includes('..')) {
     const dirName = cmd.split(' ').pop()
-    const uniqueDirName = `${dirName}${history.join('')}`
+    const uniqueDirName = `${dirName}${history.join('')}` // give a unique identifier to each directory
     history.push(uniqueDirName)
     directories[uniqueDirName] = new Directory(uniqueDirName)
   }
+
+  // If exiting a directory, update the history
   if (cmd === '$ cd ..') {
     history.pop()
   }
   const currentDir = history[history.length - 1] 
   
-  // if cmd includes dir then add directory to directories
+  // If cmd includes dir then it must be a directory - add it to the current directory's subdirectory list
   if (cmd.includes('dir')) {
     const dirNameAdd = cmd.split(' ').pop()
     //directories[currentDir].addDirectory(new Directory(dirNameAdd))
     directories[currentDir].addDirectory(`${dirNameAdd}${history.join('')}`)
   }
-  // if cmd includes a number then add it to files
+
+  // If cmd line includes a number it must be a file - add it to the current directory file list
   if (!cmd.includes('dir') && !cmd.includes('$')) {
     const fileProperties = cmd.split(' ')
     const fileSize = fileProperties[0]
@@ -61,13 +64,14 @@ commandLog.forEach((cmd, index) => {
   }
 })
 
+// Calculate the total memory of files directly in each directory
 const directoryNames = Object.keys(directories)
 // Update directory file size property
 directoryNames.forEach((key) => {
   directories[key].calculateFileSize()
 })
 
-// Recursion function to calculate directory size
+// Recursion function to calculate memory stored in current directory and all child directories. 
 function deeplyCalculateDirectorySize (directory) {
   let total = directory.fileSize
 
@@ -81,7 +85,7 @@ function deeplyCalculateDirectorySize (directory) {
   return total
 }
 
-// Calculate cumulative of directories containing 100k or less
+// Calculate sum of size of directories containing 100k or less
 let cumulativeSize = 0
 directoryNames.forEach((subDir) => {
   const size = deeplyCalculateDirectorySize(directories[subDir])
@@ -92,6 +96,7 @@ directoryNames.forEach((subDir) => {
 })
 console.log(cumulativeSize)
 
+// Calculate the smallest directory you would need to remove to free up the required space. 
 const remainingMemory = 70000000 - directories['/'].directorySize
 const requiredFreeSpace = 30000000 - remainingMemory
 console.log('Remaining Memory:', remainingMemory, 'Required Free Space:', requiredFreeSpace)
