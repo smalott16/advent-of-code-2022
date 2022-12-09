@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-const forestBlock = fs.readFileSync('test.txt', 'utf-8').split('\n').map((row) => row.split(''))
+const forestBlock = fs.readFileSync('forest.txt', 'utf-8').split('\n').map((row) => row.split(''))
 const rows = forestBlock.length
 const cols = forestBlock[0].length
 let visibilityArray = []
@@ -50,7 +50,7 @@ const findVisibility = (row, col) => {
     }
   }
   const scenicScore = treesUp * treesDown * treesLeft * treesRight
-  
+
   if (up === 'h' && down === 'h' && left === 'h' && right === 'h') {
     return {visibility: 'h', scenicScore}
   }
@@ -76,7 +76,5 @@ for (let row = 0; row < rows; row++){
 const numberVisible = visibilityArray.flatMap((val)=> val).sort().reverse().indexOf('h')
 console.log('The number of visible trees is:', numberVisible)
 
-// const highestScenicScore = scenicScoreArray.flatMap(val => val).sort().reverse()[0]
-// console.log(highestScenicScore)
-console.log(scenicScoreArray)
-console.log(findVisibility(3, 2))
+const highestScenicScore = scenicScoreArray.flatMap(val => val).sort((a, b) => b - a)[0]
+console.log('The maximum scenic score is:', highestScenicScore)
