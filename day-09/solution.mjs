@@ -1,8 +1,8 @@
 import fs from 'fs'
 
-const movements = fs.readFileSync('test.txt', 'utf-8').split('\n').map(m => m.split(' '))
-const tailHistory = [[0,0]]
-const headHistory = [[0,0]]
+const movements = fs.readFileSync('movements.txt', 'utf-8').split('\n').map(m => m.split(' '))
+let tailHistory = [[0,0]]
+let headHistory = [[0,0]]
 
 // current is the current position as an array [x, y]
 // returns an array of stringified array keys 'x-y'[]
@@ -15,17 +15,15 @@ const touchingPositions = (current) => {
   const upLeft = [current[0] - 1, current[1] + 1]
   const downRight = [current[0] + 1, current[1] - 1]
   const downLeft = [current[0] - 1, current[1] - 1]
-  return [up, down, left, right, upRight, upLeft, downRight, downLeft].map((a) => a.join('_'))
+  return [current, up, down, left, right, upRight, upLeft, downRight, downLeft].map((a) => a.join('_'))
 }
 
 // Starting position is an array of [x, y]
 // Movement is an array of [direction, size]
 const steps = (startingHead, startingTail, movement) => {
-  console.log('starting head', startingHead)
   const direction = movement[0]
   let newXHead = startingHead[0]
   let newYHead = startingHead[1]
-
   for (let i = 0; i < parseInt(movement[1]); i++) {
     switch (direction) {
       case 'R':
@@ -43,13 +41,12 @@ const steps = (startingHead, startingTail, movement) => {
     }
     
     headHistory.push([newXHead, newYHead])
-    
-    // if a separation develops, move the tail to the prev position of the head
+    headStepHistory.push([newXHead, newYHead])
     if (!(touchingPositions([...startingTail]).includes([newXHead, newYHead].join('_')))) {
       tailHistory.push([...headHistory[headHistory.length - 2]])
     }
-    
   }
+  return {head: headStepHistory, tail: tailStepHistory}
 }
 
 movements.forEach(movement => {
@@ -58,6 +55,7 @@ movements.forEach(movement => {
   steps(startingHead, startingTail, movement)
 })
 
-console.log(headHistory)
-console.log(tailHistory)
+// Find unique spaces in tail history
+const tailHistoryMap = new Set(tailHistory.map(position => position.join('_')))
+console.log('This number of positions the tail visited is:', tailHistoryMap.size)
 
