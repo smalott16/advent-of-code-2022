@@ -14,7 +14,7 @@ const touchingPositions = (current) => {
   const upRight = [current[0] + 1, current[1] + 1]
   const upLeft = [current[0] - 1, current[1] + 1]
   const downRight = [current[0] + 1, current[1] - 1]
-  const downLeft = [current[0] - 1, current[1] + 1]
+  const downLeft = [current[0] - 1, current[1] - 1]
   return [up, down, left, right, upRight, upLeft, downRight, downLeft].map((a) => a.join('_'))
 }
 
