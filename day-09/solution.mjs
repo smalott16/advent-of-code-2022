@@ -6,7 +6,7 @@ let headHistory = [[0,0]]
 
 // current is the current position as an array [x, y]
 // returns an array of stringified array keys 'x-y'[]
-const touchingPositions = (current) => {
+export const touchingPositions = (current) => {
   const up = [current[0] + 1, current[1]]
   const down = [current[0] - 1, current[1]]
   const left = [current[0], current[1] - 1]
