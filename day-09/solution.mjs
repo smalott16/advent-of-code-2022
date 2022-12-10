@@ -41,18 +41,19 @@ const steps = (startingHead, startingTail, movement) => {
     }
     
     headHistory.push([newXHead, newYHead])
-    headStepHistory.push([newXHead, newYHead])
+    
     if (!(touchingPositions([...startingTail]).includes([newXHead, newYHead].join('_')))) {
       tailHistory.push([...headHistory[headHistory.length - 2]])
     }
   }
-  return {head: headStepHistory, tail: tailStepHistory}
+  
 }
 
 movements.forEach(movement => {
   const startingHead = [...headHistory[headHistory.length - 1]]
   const startingTail = [...tailHistory[tailHistory.length -1]]
   steps(startingHead, startingTail, movement)
+  
 })
 
 // Find unique spaces in tail history
