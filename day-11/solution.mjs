@@ -16,7 +16,7 @@ class Monkey  {
     this.startingItems = this.startingItems.slice(1)
   }
   catchItem(item) {
-    this.startingItems.push(item.toString())
+    this.startingItems.push(item)
   }
   addInspectCount() {
     this.itemCount++
@@ -26,11 +26,11 @@ class Monkey  {
 // Parse Monkey List into something useful.
 const monkeySummary = []
 data.forEach((monkey, index) => {
-  const startingItems = monkey[1].split(':')[1].split(',').map(i => i.trim())
+  const startingItems = monkey[1].split(':')[1].split(',').map(i => BigInt(i.trim()))
   const operation = monkey[2].split('=')[1].split(' ').slice(1)
-  const trueTest = parseInt(monkey[4].split('monkey')[1].trim())
-  const falseTest = parseInt(monkey[5].split('monkey')[1].trim())
-  const divisibleTest = parseInt(monkey[3].split('by')[1].trim())
+  const trueTest = BigInt(monkey[4].split('monkey')[1].trim())
+  const falseTest = BigInt(monkey[5].split('monkey')[1].trim())
+  const divisibleTest = BigInt(monkey[3].split('by')[1].trim())
   monkeySummary.push(new Monkey(
     index,
     startingItems,
@@ -49,8 +49,8 @@ const playRound = (startingSummary, numberOfRounds, worryFactor) => {
       monkey.startingItems.forEach((item) => {
         monkey.addInspectCount()
         // Determine if the operation takes place against itself or the value from the array
-        const operand = monkey.operation[2] === 'old' ? parseInt(item) : parseInt(monkey.operation[2])
-        let worryLevel = parseInt(item)
+        const operand = monkey.operation[2] === 'old' ? item : BigInt(monkey.operation[2])
+        let worryLevel = item
         switch (monkey.operation[1]) {
           case ('+'):
             worryLevel = (worryLevel + operand) / worryFactor
@@ -60,16 +60,15 @@ const playRound = (startingSummary, numberOfRounds, worryFactor) => {
           break
         }
         monkey.throwItem()
-        let passTo = ''
-        console.log(worryLevel >= Number.MAX_SAFE_INTEGER ? 'WARNING' : '')
+        let passTo = BigInt(0)
         if (!(worryLevel % monkey.divisibleTest)) {
           // pass to if true
-          passTo = monkey.passToIfTrue.toString()
+          passTo = monkey.passToIfTrue
           monkeySummary[passTo].catchItem(worryLevel)
           return
         }
         // pass to if false
-        passTo = monkey.passToIfFalse.toString()
+        passTo = monkey.passToIfFalse
         monkeySummary[passTo].catchItem(worryLevel)
       })
 
@@ -78,8 +77,7 @@ const playRound = (startingSummary, numberOfRounds, worryFactor) => {
   
 }
 
-playRound(monkeySummary, 20, 1)
+playRound(monkeySummary, 10000, BigInt(1))
 
 const itemCountSummary = monkeySummary.map(monkey => monkey.itemCount).sort((a,b) => b - a)
-console.log(itemCountSummary)
 console.log('This product of the two largest numbers is:', itemCountSummary[0] * itemCountSummary[1])
