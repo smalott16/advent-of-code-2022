@@ -10,44 +10,58 @@ const isWithinSprite = (cycle, spritePosition) => {
 }
 
 const signalStrength = (cycles) => {
-  let currentCycle = 0
-  let registerValue = 1
+  let currentCycle = 1
   let spritePosition = 1
   let cycleIndex = 0
   let pixels = ''
   do {
-    // If the cycle is at the start of a new row, reset the sprite
-    if ([0,40,80,120,160,200].some((val) => val === currentCycle)) {
-      pixels = ''
+    //If the cycle is at the start of a new row, reset the sprite
+    if ([40,80,120,160,200].some((val) => val === currentCycle)) {
+      pixels += '\n'
       spritePosition = currentCycle + 1
     }
-
+    
     if (data[cycleIndex] === 'noop') {
-      pixels = pixels + (isWithinSprite(currentCycle, spritePosition) ? '#' : '.')
+      console.log(`Start cycle ${currentCycle}: begin executing ${data[cycleIndex]}`)
+      pixels = pixels + (isWithinSprite(currentCycle-1, spritePosition) ? '#' : '.')
+      console.log(`During cycle ${currentCycle}: CRT draws pixel in position ${pixels.length -1}`)
+      console.log(`Current CRT row: ${pixels}`)
       currentCycle++
       cycleIndex++
       continue
     }
-
-    // If there are only 2 or less cycles remaining break here because the next
-    // lines will complete another cycle.
-    if (cycles - currentCycle <= 2) {
-      pixels = pixels + (isWithinSprite(currentCycle, spritePosition) ? '#' : '.')
+    
+    // Do something in the first cycle
+    console.log(`Start Cycle ${currentCycle}: begin executing ${data[cycleIndex]}`)
+    pixels = pixels + (isWithinSprite(currentCycle-1, spritePosition) ? '#' : '.')
+    console.log(`During cycle ${currentCycle}: CRT draws pixel in position ${pixels.length -1}`)
+    console.log(`Current CRT row: ${pixels}`)
+    // Complete first cycle
+    currentCycle++
+    // Check if we have hit our cycles limit
+    if (currentCycle % 40 === 0) {
+      continue
+    }
+    if (currentCycle >= cycles) {
       break
     }
-    pixels = pixels + (isWithinSprite(currentCycle, spritePosition) ? '#' : '.')
-    pixels = pixels + (isWithinSprite(currentCycle + 1, spritePosition) ? '#' : '.')
+    // Do something in the second cycle
+    pixels = pixels + (isWithinSprite(currentCycle-1, spritePosition) ? '#' : '.')
+    console.log('current position', currentCycle, spritePosition)
+    console.log(`During cycle ${currentCycle}: CRT draws pixel in position ${pixels.length -1}`)
+    console.log(`Current CRT row: ${pixels}`)
+    console.log(`End of cycle: ${currentCycle}: finish executing ${data[cycleIndex]}`)
     const step = parseInt(data[cycleIndex].split(' ')[1])
-    registerValue += step
     spritePosition += step
-    currentCycle += 2
+    console.log(`Sprite position: ${spritePosition}`)
+    currentCycle++
     cycleIndex++
     
-  } while (currentCycle <= cycles || cycleIndex === data.length - 1)
-  return {strength: registerValue * cycles, pixels}
+    
+  } while (currentCycle < cycles || cycleIndex === data.length - 1)
+  return pixels
   
 }
 
-const totalSignalStrength = signalStrength(20).strength + signalStrength(60).strength + signalStrength(100).strength + signalStrength(140).strength + signalStrength(180).strength + signalStrength(220).strength 
-console.log('The total signal strength is:', totalSignalStrength)
+console.log(signalStrength(120))
 
