@@ -77,7 +77,7 @@ const playRound = (startingSummary, numberOfRounds, worryFactor) => {
   
 }
 
-playRound(monkeySummary, 10000, BigInt(1))
+playRound(monkeySummary, 20, BigInt(3))
 
 const itemCountSummary = monkeySummary.map(monkey => monkey.itemCount).sort((a,b) => b - a)
 console.log('This product of the two largest numbers is:', itemCountSummary[0] * itemCountSummary[1])
