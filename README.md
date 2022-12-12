@@ -8,3 +8,6 @@
 - Day 6: Tuning Trouble (JS)
 - Day 7: No Space Left On Device (JS)
 - Day 8: Tree Top Tree House (JS)
+- Day 9: Rope Bridge (JS)
+- Day 10: Cathode Ray Tube (JS)
+- Day 11: Monkey In The Middle (JS)
