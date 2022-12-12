@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-const data = fs.readFileSync('mim-game.txt', 'utf-8').split('\n\n').map(i => i.split('\n'))
+const data = fs.readFileSync('test.txt', 'utf-8').split('\n\n').map(i => i.split('\n'))
 
 class Monkey  {
   constructor (name, startingItems, operation, divisibleTest, passToIfTrue, passToIfFalse, itemCount) {
@@ -42,7 +42,7 @@ data.forEach((monkey, index) => {
   ))
 })
 
-const playRound = (startingSummary, numberOfRounds) => {
+const playRound = (startingSummary, numberOfRounds, worryFactor) => {
   for (let i = 0; i < numberOfRounds; i++) {
     // Analyze Each Monkey
     startingSummary.forEach((monkey) => {
@@ -53,14 +53,15 @@ const playRound = (startingSummary, numberOfRounds) => {
         let worryLevel = parseInt(item)
         switch (monkey.operation[1]) {
           case ('+'):
-            worryLevel = parseInt((worryLevel + operand) / 3)
+            worryLevel = (worryLevel + operand) / worryFactor
             break
           case ('*'):
-            worryLevel = parseInt((worryLevel * operand) / 3)
+            worryLevel = (worryLevel * operand) / worryFactor
           break
         }
         monkey.throwItem()
         let passTo = ''
+        console.log(worryLevel >= Number.MAX_SAFE_INTEGER ? 'WARNING' : '')
         if (!(worryLevel % monkey.divisibleTest)) {
           // pass to if true
           passTo = monkey.passToIfTrue.toString()
@@ -77,7 +78,8 @@ const playRound = (startingSummary, numberOfRounds) => {
   
 }
 
-playRound(monkeySummary, 20)
+playRound(monkeySummary, 20, 1)
 
 const itemCountSummary = monkeySummary.map(monkey => monkey.itemCount).sort((a,b) => b - a)
+console.log(itemCountSummary)
 console.log('This product of the two largest numbers is:', itemCountSummary[0] * itemCountSummary[1])
